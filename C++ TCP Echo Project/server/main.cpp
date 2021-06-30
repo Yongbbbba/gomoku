@@ -18,7 +18,7 @@ int main()
 	SOCKADDR_IN serverAddress, clientAddress;
 
 	int serverPort = 9876;
-	char received[256];  // recvBuff
+	char received[1024];  // recvBuff
 
 	// winsock 초기화. 2.2 버전 사용
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)  // 성공하면 0을 반환
@@ -60,10 +60,10 @@ int main()
 		int length = recv(clientSocket, received, sizeof(received), 0);
 		received[length] = NULL;  // 마지막 문자를 NULL로 바꿔서 잘라내기
 		cout << "[클라이언트 메시지]: " << received << endl;
-		cout << "[메시지 전송]: " << received << endl;
-		if (strcmp(received, "[exit]") == 0)
+		cout << "[메시지 전송]: " << received << endl;  // 에코~~~
+		if (strcmp(received, "[exit]") == 0)  // strcmp -> 같다면 0을 반환함
 		{
-			send(clientSocket, received, sizeof(received) - 1, 0);
+			send(clientSocket, received, sizeof(received) - 1, 0);  // 엔터를 쳐서 전송하기 때문에 끝에 개행문자는 제거하기 위해 -1 
 			cout << "[서버 종료]" << endl;
 			break;
 		}
@@ -71,5 +71,10 @@ int main()
 
 	}
 
+	closesocket(clientSocket);
+	closesocket(serverSocket);
+	WSACleanup();
+	system("pause");
+	return 0;
 	
 }
