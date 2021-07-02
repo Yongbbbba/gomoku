@@ -29,12 +29,38 @@ namespace Client
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.boardPicture = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.boardPicture)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // boardPicture
+            // 
+            this.boardPicture.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(216)))));
+            this.boardPicture.Location = new System.Drawing.Point(20, 20);
+            this.boardPicture.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.boardPicture.Name = "boardPicture";
+            this.boardPicture.Size = new System.Drawing.Size(500, 500);
+            this.boardPicture.TabIndex = 0;
+            this.boardPicture.TabStop = false;
+            this.boardPicture.Paint += new System.Windows.Forms.PaintEventHandler(this.boardPicture_Paint);
+            this.boardPicture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boardPicture_MouseDown);
+            // 
+            // SinglePlayForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(864, 541);
+            this.Controls.Add(this.boardPicture);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Name = "SinglePlayForm";
             this.Text = "SinglePlayForm";
+            ((System.ComponentModel.ISupportInitialize)(this.boardPicture)).EndInit();
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.PictureBox boardPicture;
     }
 }
