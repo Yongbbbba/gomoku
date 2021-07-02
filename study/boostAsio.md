@@ -52,3 +52,109 @@ Boost Asio의 Query 클래스는 도메인 주소와 프로토콜을 이용해 D
 
 
 
+## 동기적 TCP 통신 예제
+
+서버와 연결하면 서버가 현재 시간을 클라이언트에 보내주고 연결이 끊기는 소켓 예제
+
+### client
+
+```c++
+#include <iostream>
+#include <boost/array.hpp>
+#include <boost/asio.hpp>
+
+using boost::asio::ip::tcp;
+using namespace std;
+
+int main()
+{
+	try
+	{
+
+		// 기본적으로 Boost Asio 프로그램은 하나의 IO Service 객체를 가집니다.
+		boost::asio::io_service io_service;
+		// 도메인 이름을 TCP 종단점으로 바뀌기 위해 Resolver를 사용
+		tcp::resolver resolver(io_service);
+		// 서버로는 로컬 서버, 서비스는 Daytime 프로토콜을 적어주기
+		tcp::resolver::query query("localhost", "daytime");
+		// DNS를 거쳐 IP주소 및 포트 번호를 얻어오기
+		tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
+		// 소켓 객체를 초기화하여 서버에 연결
+		tcp::socket socket(io_service);
+		boost::asio::connect(socket, endpoint_iterator);
+		while (true) 
+		{
+			// 버퍼 및 오류 처리 변수를 선언
+			boost::array<char, 128> buf;
+			boost::system::error_code error;
+			//버퍼를 이용해 서버로부터 데이터를 받아오기
+			size_t len = socket.read_some(boost::asio::buffer(buf), error);
+			if (error == boost::asio::error::eof) break;
+			else if (error)
+				throw boost::system::system_error(error);
+			//버퍼에 담긴 데이터를 화면에 출력
+			cout.write(buf.data(), len);
+		}
+
+	}
+	catch (exception& e)
+	{
+		cerr << e.what() << endl;
+	}
+
+}
+
+```
+
+
+
+### server
+
+```c++
+#define _CRT_SECURE_NO_WARNINGS
+#include <ctime>
+#include <iostream>
+#include <string>
+#include <boost/asio.hpp>
+
+using boost::asio::ip::tcp;
+using namespace std;
+
+
+// 서버 컴퓨터의 날짜 및 시간 정보를 반환 
+string make_daytime_string()
+{
+	time_t now = time(0);
+	return ctime(&now);
+}
+
+int main()
+{
+	try {
+		// 기본적으로 Boost Asio 프로그램은 하나의 IO Service 객체를 가진다.
+		boost::asio::io_service io_service;
+		// 80번: HTTP 프로토콜 13번: DAYTIME 프로토콜
+		// TCP 프로토콜의 13번 포트로 연결을 받는 수동 소켓을 생성
+		// winsock2 보다 간결. bind와 listen을 한 번에
+		tcp::acceptor acceptor(io_service, tcp::endpoint(tcp::v4(), 13));
+		// 모든 클라이언트에 대해 무한정 반복 수행
+		while (true)
+		{
+			// 클라이언트 소켓 객체를 생성해 연결을 기다립니다.
+			tcp::socket socket(io_service);
+			acceptor.accept(socket);
+			// 연결이 완료되면 해당 클라이언트에게 보낼 메시지를 생성
+			string message = make_daytime_string();
+			// 해당 클라이언트에게 메시지를 담아 전송
+			boost::system::error_code ignored_error;
+			boost::asio::write(socket, boost::asio::buffer(message), ignored_error);
+		}
+	}
+	catch (exception& e) {
+		cerr << e.what() << endl;
+	}
+	return 0;
+}
+
+```
+

@@ -22,10 +22,11 @@
 
 ## 진행 상황
 
-- Winsock2 라이브러리 학습 및 실습([학습내용](./study/winsock2.md))
+- Winsock2 라이브러리 학습 및 실습([학습내용](./study/winsock2.md)) 
 - boost asio 학습 및 실습([학습내용](./study/boostAsio.md))
 - boost 라이브러리 사용 예정 -> 1.76 버전 (msvc-14.2로 빌드)
   - 추후 자체 제작 네트워크 라이브러리(멀티스레드 + IOCP) 제작해서 붙일 계획
+- C# windows Forms (.NET Framework 4.7.2)  활용하여 오목 게임 화면 구성
 
 
 
