@@ -30,6 +30,8 @@ namespace Client
         private void InitializeComponent()
         {
             this.boardPicture = new System.Windows.Forms.PictureBox();
+            this.playButton = new System.Windows.Forms.Button();
+            this.status = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.boardPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,11 +47,33 @@ namespace Client
             this.boardPicture.Paint += new System.Windows.Forms.PaintEventHandler(this.boardPicture_Paint);
             this.boardPicture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.boardPicture_MouseDown);
             // 
+            // playButton
+            // 
+            this.playButton.Location = new System.Drawing.Point(660, 44);
+            this.playButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.playButton.Name = "playButton";
+            this.playButton.Size = new System.Drawing.Size(100, 40);
+            this.playButton.TabIndex = 1;
+            this.playButton.Text = "게임 시작";
+            this.playButton.UseVisualStyleBackColor = true;
+            this.playButton.Click += new System.EventHandler(this.playButton_Click);
+            // 
+            // status
+            // 
+            this.status.Location = new System.Drawing.Point(580, 114);
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(272, 15);
+            this.status.TabIndex = 2;
+            this.status.Text = "게임을 시작해주세요";
+            this.status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SinglePlayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 541);
+            this.Controls.Add(this.status);
+            this.Controls.Add(this.playButton);
             this.Controls.Add(this.boardPicture);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "SinglePlayForm";
@@ -62,5 +86,7 @@ namespace Client
         #endregion
 
         private System.Windows.Forms.PictureBox boardPicture;
+        private System.Windows.Forms.Button playButton;
+        private System.Windows.Forms.Label status;
     }
 }
