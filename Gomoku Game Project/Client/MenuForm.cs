@@ -34,5 +34,13 @@ namespace Client
         {
             Show();  //Hide 했던 MenuForm 창 보이기
         }
+
+        private void multiPlayButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            MultiPlayForm multiPlayForm = new MultiPlayForm();
+            multiPlayForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
+            multiPlayForm.Show();
+        }
     }
 }
