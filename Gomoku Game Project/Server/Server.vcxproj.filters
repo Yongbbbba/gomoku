@@ -9,10 +9,39 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Client">
+      <UniqueIdentifier>{a489114c-2afb-4030-838e-d6ad95b711ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Util">
+      <UniqueIdentifier>{ef52caad-8196-4295-9795-bc09820060f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Server">
+      <UniqueIdentifier>{0fe2a255-42a6-4872-a200-6b19220750d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>소스 파일\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>소스 파일\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Server.cpp">
+      <Filter>소스 파일\Server</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>소스 파일\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>소스 파일\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.h">
+      <Filter>소스 파일\Server</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
