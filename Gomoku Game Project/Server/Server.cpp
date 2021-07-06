@@ -54,7 +54,7 @@ void Server::exitClient(int roomID) {
 	for (int i = 0; i < connections.size(); i++) {
 		if (connections[i]->getRoomID() == roomID) {
 			ZeroMemory(sent, 256);
-			sprintf(sent, "%s", "[Exit]");
+			sprintf(sent, "%s", "[Exit]");  // 방에서 한 사람이 나가면 다른 사람에게 알려주기
 			send(connections[i]->getClientSocket(), sent, 256, 0);
 		}
 	}
