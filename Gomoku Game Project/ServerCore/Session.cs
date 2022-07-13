@@ -57,7 +57,8 @@ namespace ServerCore
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
         SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
-        public abstract void OnConnected(EndPoint endPoint);
+        //public abstract void OnConnected(EndPoint endPoint);
+        public abstract void OnConnected(Socket socket);
         public abstract int OnRecv(ArraySegment<byte> buffer);
         public abstract void OnSend(int numOfBytes);
         //public abstract void OnDisconnected(EndPoint endPoint);
@@ -80,7 +81,7 @@ namespace ServerCore
                 return;
             }
 
-            OnDisconnected(_socket.RemoteEndPoint);
+            OnDisconnected(_socket);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
         }
@@ -95,6 +96,11 @@ namespace ServerCore
                     RegisterSend();
                 }
             }
+        }
+
+        public Socket GetSocket()
+        {
+            return _socket;
         }
 
         #region 네트워크 통신 파트
