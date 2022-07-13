@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace ServerCore
 {
-    class Connector
+    public class Connector
     {
         Func<Session> _sessionFactory;
 

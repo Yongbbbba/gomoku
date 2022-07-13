@@ -6,7 +6,7 @@ using System.Net.Sockets;
 
 namespace ServerCore
 {
-    class Listener
+    public class Listener
     {
         Socket _listenSocket;
         Func<Session> _sessionFactory;
@@ -18,7 +18,7 @@ namespace ServerCore
 
             _listenSocket.Bind(endPoint);
 
-            _listenSocket.Listen(10); // backlog: 커넥션 큐에 pending된 큐의 최대 길이
+            _listenSocket.Listen(32); // backlog: 커넥션 큐에 pending된 큐의 최대 길이
 
             SocketAsyncEventArgs args = new SocketAsyncEventArgs();
             args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);

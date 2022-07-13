@@ -93,7 +93,7 @@ namespace Client
         private void enterButton_Click(object sender, EventArgs e)
         {
             tcpClient = new TcpClient();
-            tcpClient.Connect("127.0.0.1", 9876);
+            tcpClient.Connect("127.0.0.1", 7777);
             stream = tcpClient.GetStream();
 
             thread = new Thread(new ThreadStart(read));

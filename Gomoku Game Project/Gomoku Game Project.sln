@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerCore", "ServerCore\ServerCore.csproj", "{9FEA0D2C-0459-426B-AA85-68D776362E19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{EB820D61-C1EB-46FF-9E93-F302E7524511}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,18 @@ Global
 		{9FEA0D2C-0459-426B-AA85-68D776362E19}.Release|x64.Build.0 = Release|Any CPU
 		{9FEA0D2C-0459-426B-AA85-68D776362E19}.Release|x86.ActiveCfg = Release|Any CPU
 		{9FEA0D2C-0459-426B-AA85-68D776362E19}.Release|x86.Build.0 = Release|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Debug|x64.Build.0 = Debug|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Debug|x86.Build.0 = Debug|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Release|x64.ActiveCfg = Release|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Release|x64.Build.0 = Release|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB820D61-C1EB-46FF-9E93-F302E7524511}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

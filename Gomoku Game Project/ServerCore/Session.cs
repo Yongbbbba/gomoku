@@ -7,6 +7,41 @@ using System.Threading;
 
 namespace ServerCore
 {
+    public abstract class PacketSession : Session
+    {
+        public static readonly int HeaderSIze = 2; // size of ushort
+
+        public sealed override int OnRecv(ArraySegment<byte> buffer)
+        {
+            int procesLen = 0;
+
+            while (true)
+            {
+                // 헤더(패킷 사이즈)는 파싱할 수 있을만큼 도착했는지 확인
+                if (buffer.Count < HeaderSIze)
+                {
+                    break;
+                }
+
+                // 패킷이 완전체로 도착했는지 확인 
+                ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset); // offset에서 16비트만큼 uint로 읽어내기
+                if (buffer.Count < dataSize) // 다 도착하지 않은 것
+                {
+                    break;
+                }
+
+                OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
+
+                procesLen += dataSize;
+                buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
+            }
+
+            return procesLen;
+        }
+
+        public abstract void OnRecvPacket(ArraySegment<byte> buffer);
+    }
+
     public abstract class Session
     {
         Socket _socket;
@@ -25,7 +60,8 @@ namespace ServerCore
         public abstract void OnConnected(EndPoint endPoint);
         public abstract int OnRecv(ArraySegment<byte> buffer);
         public abstract void OnSend(int numOfBytes);
-        public abstract void OnDisconnected(EndPoint endPoint);
+        //public abstract void OnDisconnected(EndPoint endPoint);
+        public abstract void OnDisconnected(Socket socket);
 
         public void Start(Socket socket)
         {
@@ -47,6 +83,18 @@ namespace ServerCore
             OnDisconnected(_socket.RemoteEndPoint);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
+        }
+
+        public void Send(ArraySegment<byte> sendBuff)
+        {
+            lock (_lock)
+            {
+                _sendQueue.Enqueue(sendBuff);
+                if (_pendingList.Count == 0)
+                {
+                    RegisterSend();
+                }
+            }
         }
 
         #region 네트워크 통신 파트
@@ -98,6 +146,54 @@ namespace ServerCore
             else
             {
                 Disconnect();
+            }
+        }
+
+        void RegisterSend()
+        {
+            while (_sendQueue.Count > 0)
+            {
+                ArraySegment<byte> buff = _sendQueue.Dequeue();
+                _pendingList.Add(buff);
+            }
+            _sendArgs.BufferList = _pendingList;
+
+            bool pending = _socket.SendAsync(_sendArgs);
+
+            if (pending == false)
+            {
+                OnSendCompleted(null, _sendArgs);
+            }
+        }
+
+        void OnSendCompleted(object sender, SocketAsyncEventArgs args)
+        {
+            lock (_lock)
+            {
+                if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
+                {
+                    try
+                    {
+                        _sendArgs.BufferList = null;
+                        _pendingList.Clear();
+
+                        OnSend(_sendArgs.BytesTransferred);
+
+                        // CPU를 점유한 스레드가 쓸데없이 문맥교환하지 않고 일감 다 처리해버리기
+                        if (_sendQueue.Count > 0)
+                        {
+                            RegisterSend();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"OnSendCompleted Failed {e}");
+                    }
+                }
+                else
+                {
+                    Disconnect();
+                }
             }
         }
 
