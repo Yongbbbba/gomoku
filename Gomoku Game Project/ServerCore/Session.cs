@@ -57,12 +57,12 @@ namespace ServerCore
         SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
         SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
-        //public abstract void OnConnected(EndPoint endPoint);
-        public abstract void OnConnected(Socket socket);
+        public abstract void OnConnected(EndPoint endPoint);
+        //public abstract void OnConnected(Socket socket);
         public abstract int OnRecv(ArraySegment<byte> buffer);
         public abstract void OnSend(int numOfBytes);
-        //public abstract void OnDisconnected(EndPoint endPoint);
-        public abstract void OnDisconnected(Socket socket);
+        public abstract void OnDisconnected(EndPoint endPoint);
+        //public abstract void OnDisconnected(Socket socket);
 
         public void Start(Socket socket)
         {
@@ -81,7 +81,7 @@ namespace ServerCore
                 return;
             }
 
-            OnDisconnected(_socket);
+            OnDisconnected(_socket.RemoteEndPoint);
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
         }

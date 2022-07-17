@@ -89,9 +89,9 @@ namespace GameServer
             Console.WriteLine($"RecvPacketId : {id}, Size : {size}");
         }
 
-        public override void OnConnected(Socket socket)
+        public override void OnConnected(EndPoint endPoint)
         {
-
+			Console.WriteLine($"OnConnected : {endPoint}");
         }
 
         public override void OnSend(int numOfBytes)
@@ -99,9 +99,12 @@ namespace GameServer
             throw new NotImplementedException();
         }
 
-        public override void OnDisconnected(Socket socket)
+        public override void OnDisconnected(EndPoint endPoint)
         {
-            throw new NotImplementedException();
+            Room.Leave(this);
+	        SessionManager.Instance.Remove(this);
+			
+			Console.WriteLine($"OnDisconnected : {endPoint}");
         }
     }
 }

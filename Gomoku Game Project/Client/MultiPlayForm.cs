@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
+
 namespace Client
 {
     public partial class MultiPlayForm : Form
@@ -22,7 +23,7 @@ namespace Client
         private const int rectSize = 33; // 오목판의 셀 크기
         private const int edgeCount = 15; // 오목판의 선 개수
 
-        private enum Horse { none = 0, BLACK, WHITE };
+        //private enum Horse { none = 0, BLACK, WHITE };
         private Horse[,] board;
         private Horse nowPlayer;
         private bool nowTurn;
@@ -71,9 +72,11 @@ namespace Client
             {
                 refresh();
                 playing = true;
-                string message = "[Play]";
-                byte[] buf = Encoding.ASCII.GetBytes(message + this.roomTextBox.Text);
-                stream.Write(buf, 0, buf.Length);
+                //string message = "[Play]";
+                PlayerPlay packet;
+                packet.
+                //byte[] buf = Encoding.ASCII.GetBytes(message + this.roomTextBox.Text);
+                //stream.Write(buf, 0, buf.Length);
                 this.status.Text = "상대 플레이어의 준비를 기다립니다.";
                 this.playButton.Enabled = false;
             }
