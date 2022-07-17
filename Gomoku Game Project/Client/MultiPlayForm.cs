@@ -11,6 +11,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
+using ServerCore;
+
 
 namespace Client
 {
@@ -19,6 +21,7 @@ namespace Client
         private Thread thread; // 통신을 위한 쓰레드
         private TcpClient tcpClient;// TCP 클라이언트
         private NetworkStream stream;
+        
 
         private const int rectSize = 33; // 오목판의 셀 크기
         private const int edgeCount = 15; // 오목판의 선 개수
@@ -73,8 +76,6 @@ namespace Client
                 refresh();
                 playing = true;
                 //string message = "[Play]";
-                PlayerPlay packet;
-                packet.
                 //byte[] buf = Encoding.ASCII.GetBytes(message + this.roomTextBox.Text);
                 //stream.Write(buf, 0, buf.Length);
                 this.status.Text = "상대 플레이어의 준비를 기다립니다.";
@@ -96,7 +97,14 @@ namespace Client
         private void enterButton_Click(object sender, EventArgs e)
         {
             tcpClient = new TcpClient();
-            tcpClient.Connect("127.0.0.1", 7777);
+
+            string host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
+            IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+
+            tcpClient.Connect(endPoint);
+
             stream = tcpClient.GetStream();
 
             thread = new Thread(new ThreadStart(read));
@@ -104,9 +112,25 @@ namespace Client
             threading = true;
 
             /* 방 접속 진행하기 */
-            string message = "[Enter]";
-            byte[] buf = Encoding.ASCII.GetBytes(message + this.roomTextBox.Text);
-            stream.Write(buf, 0, buf.Length);
+            //string message = "[Enter]";
+            //byte[] buf = Encoding.ASCII.GetBytes(message + this.roomTextBox.Text);
+            //stream.Write(buf, 0, buf.Length);
+            ArraySegment<byte> s = SendBufferHelper.Open(4096);
+            PlayerEnter packet = new PlayerEnter() { size = 0, packetId=(ushort)PacketID.PlayerEnter, roomID = UInt32.Parse(this.roomTextBox.Text) };
+            ushort sendSize = 0;
+            bool success = true;
+            sendSize += 2;
+            
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset + sendSize, s.Count - sendSize), packet.packetId);
+            sendSize += 2;
+
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset + sendSize, s.Count - sendSize), packet.roomID);
+            sendSize += 4;
+
+            success &= BitConverter.TryWriteBytes(new Span<byte>(s.Array, s.Offset, s.Count), sendSize);
+            ArraySegment<byte> sendBuff = SendBufferHelper.Close(sendSize);
+
+            stream.Write(sendBuff.Array);
         }
 
         /* 서버로부터 메시지를 전달 받습니다. */
